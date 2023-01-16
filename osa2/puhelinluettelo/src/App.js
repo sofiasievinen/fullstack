@@ -3,28 +3,60 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [isError, setError] = useState(false)
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personService
+    .getAll()
+      .then(initialPersons => {
+      setPersons(initialPersons)
+    })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
     if (persons.flatMap((x) => [x.name]).includes(newName)) {
       console.log('ON JO!!!')
-      window.alert(`${newName} is already added to phonebook`)
+
+      if (window.confirm (`${newName} is already added to the phonebook, replace the old number with a new one?`)) {        
+        const person = persons.find(n => n.name === newName)
+        const changedPerson = { ...person, number: newNumber}
+  
+        personService
+        .update(changedPerson.id, changedPerson)
+        .then(response => {
+          setPersons(persons.map(person => person.id !== changedPerson.id ? person : response.data))
+          setNotificationMessage(
+            `${newName}'s contact information was updated`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 3000)
+          setNewName('')
+          setNewNumber('')
+        })
+        .catch(error => {
+          setError(true)
+          setNotificationMessage(
+            `Information of ${person.name} has already been deleted from the server`
+          )
+          setTimeout(() => {
+            setNotificationMessage(null)
+            setError(false)
+          }, 3000)
+        })
+      }
+
     }
     else {
       const personObject = {
@@ -32,13 +64,46 @@ const App = () => {
         number: newNumber
       }
       console.log(newName, newNumber)
-      
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+
+      personService
+      .create(personObject)
+        .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNotificationMessage(
+          `${newName} was added to the phonebook`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 3000)
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
-  
+
+  const deletePerson = (person) => {
+    console.log('moi')
+    if (window.confirm (`Delete ${person.name}?`)) {
+      personService
+      .remove(person.id)
+      .then(returnedPerson => {
+        setPersons(persons.filter(dude => dude.id !== person.id))
+        setNotificationMessage(
+          `${person.name} was deleted from the phonebook`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 3000)
+      })
+      .catch(error => {
+        alert(
+          `${person.name} is not in the server`
+        )
+      })
+      console.log('delete')
+    }
+  }
+
   const handleNameChange = (event) => {
     console.log(event.target.value)
     setNewName(event.target.value)
@@ -62,6 +127,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification 
+      message = {notificationMessage}
+      isError = {isError}
+      />
       <h3>Filter shown contacts</h3>
       <Filter
       handleFilterChange = {handleFilterChange}
@@ -78,6 +147,7 @@ const App = () => {
       <h3>Numbers</h3>
       <Persons
       personsToShow = {personsToShow}
+      deletePerson = {deletePerson}
       />
     </div>
   )
