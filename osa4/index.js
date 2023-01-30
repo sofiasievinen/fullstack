@@ -1,10 +1,12 @@
-const http = require('http')
-const express = require('express')
-const app = express()
+const app = require('./app') 
+const config = require('./utils/config')
 const logger = require('./utils/logger')
-const cors = require('cors')
-const mongoose = require('mongoose')
 
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
+})
+
+/*
 const blogSchema = mongoose.Schema({
   title: String,
   author: String,
@@ -12,7 +14,10 @@ const blogSchema = mongoose.Schema({
   likes: Number
 })
 
+
 const Blog = mongoose.model('Blog', blogSchema)
+
+
 
 const mongoUrl = `mongodb+srv://fullstack:kissa@cluster0.gkkyuqo.mongodb.net/bloglist?retryWrites=true&w=majority`
 mongoose.connect(mongoUrl)
@@ -20,7 +25,7 @@ mongoose.connect(mongoUrl)
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (request, response) => {
+/*app.get('/', (request, response) => {
     response.send('<h1>Blog list</h1>')
 })
 
@@ -45,13 +50,5 @@ app.post('/api/blogs', (request, response) => {
 const PORT = 3003
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
-})
-
-/*
-const app = require('./app') 
-const config = require('./utils/config')
-const logger = require('./utils/logger')
-
-app.listen(config.PORT, () => {
-  logger.info(`Server running on port ${config.PORT}`)
 })*/
+
