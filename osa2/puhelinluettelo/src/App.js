@@ -78,16 +78,31 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
+      .catch(error => {
+        setError(true)
+        console.log(error.response.data)
+        setNotificationMessage(
+          `${error.response.data.error}`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+          setError(false)
+        }, 3000)
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
 
   const deletePerson = (person) => {
-    console.log('moi')
+    console.log(person)
+    console.log('moi', person.id)
     if (window.confirm (`Delete ${person.name}?`)) {
       personService
       .remove(person.id)
       .then(returnedPerson => {
         setPersons(persons.filter(dude => dude.id !== person.id))
+        console.log('setpersons')
         setNotificationMessage(
           `${person.name} was deleted from the phonebook`
         )
