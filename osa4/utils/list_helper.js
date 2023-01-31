@@ -1,3 +1,18 @@
+const initialBlogs = [
+    {
+        "title": "testiblogi",
+        "author": "testaaja 1",
+        "url": "www.testi.fi",
+        "likes": 1432
+      },
+      {
+        "title": "kokeilu",
+        "author": "testaaja 2",
+        "url": "www.kokeilu.fi",
+        "likes": 36
+      },
+  ]
+
 const dummy = (blogs) => {
     return 1
   }

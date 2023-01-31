@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
+const helper = require ('../utils/list_helper')
 
 const Blog = require('../models/blog')
 
@@ -36,6 +37,11 @@ test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(initialBlogs.length)
   })
+
+test('id is not called _id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined
+})
 
 afterAll(async () => {
   await mongoose.connection.close()
