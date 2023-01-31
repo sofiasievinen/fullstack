@@ -20,13 +20,10 @@ const initialBlogs = [
       },
   ]
 
-beforeEach(async () => {
-await Blog.deleteMany({})
-let blogObject = new Blog(initialBlogs[0])
-await blogObject.save()
-blogObject = new Blog(initialBlogs[1])
-await blogObject.save()
-})
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    await Blog.insertMany(initialBlogs)
+  })
 
 test('blogs are returned as json', async () => {
   await api
