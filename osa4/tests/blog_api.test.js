@@ -21,6 +21,11 @@ const initialBlogs = [
       },
   ]
 
+  const blogsInDB = async () => {
+    const blogs = await Blog.find({})
+    return blogs.map(blog => blog.toJSON())
+}
+
   beforeEach(async () => {
     await Blog.deleteMany({})
     await Blog.insertMany(initialBlogs)
@@ -85,6 +90,44 @@ const likes = response.body.map(r => r.likes)
 expect(response.body).toHaveLength(initialBlogs.length +1)
 expect(likes[2]).toEqual(0)
 })
+
+/*test('if no title is given, returns 400 bad request', async () => {
+    const newBlog = {
+        author: "hemmo 4",
+        url: "www.testitesti.fi", 
+        likes: 20
+        }
+    
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
+
+test('if no url is given, returns 400 bad request', async () => {
+    const newBlog = {
+        title: "testiblogi",
+        author: "hemmo 4",
+        likes: 20
+        }
+    
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})*/
+    
+test('a blog can be deleted', async () => {
+    const blogs = await blogsInDB()
+    const toBeDeleted = blogs[0]
+    await api
+      .delete(`/api/blogs/${toBeDeleted.id}`)
+      .expect(204)
+  
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(initialBlogs.length -1)
+  })
 
 afterAll(async () => {
   await mongoose.connection.close()
