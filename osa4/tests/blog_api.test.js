@@ -129,6 +129,30 @@ test('a blog can be deleted', async () => {
     expect(response.body).toHaveLength(initialBlogs.length -1)
   })
 
+test('a blog can be updated', async () => {
+const blogs = await blogsInDB()
+const toBeUpdated = blogs[0]
+const updatedBlog = {
+    "title": "päivitetty blogi",
+    "author": "testaaja 1",
+    "url": "www.testi.fi",
+    "likes": 1432
+    }
+    
+await api
+    .post(`/api/blogs/${toBeUpdated.id}`)
+    .send(updatedBlog)
+    .expect(200)
+
+const response = await api.get('/api/blogs')
+
+const titles = response.body.map(r => r.title)
+expect(response.body).toHaveLength(initialBlogs.length)
+expect(titles).toContain(
+  'päivitetty blogi'
+)
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
 })
