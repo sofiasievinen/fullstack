@@ -2,8 +2,7 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "ruokablogi",
-  "author": "Maria",
-  "url": "www.marianblogi.fi",
-  "likes": 314
+  "title": "neljäs",
+  "author": "joku",
+  "url": "www.joku.fi"
 }
