@@ -91,7 +91,7 @@ expect(response.body).toHaveLength(initialBlogs.length +1)
 expect(likes[2]).toEqual(0)
 })
 
-/*test('if no title is given, returns 400 bad request', async () => {
+test('if no title is given, returns 400 bad request', async () => {
     const newBlog = {
         author: "hemmo 4",
         url: "www.testitesti.fi", 
@@ -115,7 +115,7 @@ test('if no url is given, returns 400 bad request', async () => {
         .post('/api/blogs')
         .send(newBlog)
         .expect(400)
-})*/
+})
     
 test('a blog can be deleted', async () => {
     const blogs = await blogsInDB()

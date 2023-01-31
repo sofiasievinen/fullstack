@@ -13,40 +13,30 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-  /*const blog = new Blog(request.body)
 
-  blog
-    .save()
-    .then(result => {
-      response.status(201).json(result)
-    })*/
-   /* const body = request.body
+  const body = request.body
 
-    const blog = new Blog({
-      title: body.title,
-      author: body.author,
-      url: body.url,
-      likes: body.likes
-    })*/
+  if (body.title && body.url) {
 
-    const body = request.body
-
-      if (body.likes) {
-        const blog = new Blog(request.body)
-        const savedBlog = await blog.save()
-        response.status(201).json(savedBlog)
-      }
-      else {
-        const blog = new Blog({
-          title: body.title,
-          author: body.author,
-          url: body.url,
-          likes: 0
-        })
-        const savedBlog = await blog.save()
-        response.status(201).json(savedBlog)
-      }
-  
+    if (body.likes) {
+      const blog = new Blog(request.body)
+      const savedBlog = await blog.save()
+      response.status(201).json(savedBlog)
+    }
+    else {
+      const blog = new Blog({
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: 0
+      })
+      const savedBlog = await blog.save()
+      response.status(201).json(savedBlog)
+    }
+  }
+  else {
+    response.status(400).end()
+  }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
