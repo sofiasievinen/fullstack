@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlkYSIsImlkIjoiNjNlMjVlYTg5NzBlMjhiODBlZDE5Zjc0IiwiaWF0IjoxNjc1NzgxNzExfQ.HFVKTqARHvXbsdd0ZNDoHNfZJyXCVWQofwhgvkbvfwY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlkYSIsImlkIjoiNjNlMjVlYTg5NzBlMjhiODBlZDE5Zjc0IiwiaWF0IjoxNjc1NzgyNzEzfQ.HCMWy6o2GnRftBnw9Bi8wXcOMLJ2UOa40CqVKvhNtwU
 
 {
-  "title": "idan testi",
-  "author": "kirjoittaja",
-  "url": "blogi.com"
+  "title": "idan neljäs testi",
+  "author": "toinen kirjoittaja",
+  "url": "toinenblogi.com"
 }
