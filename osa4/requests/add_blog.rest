@@ -2,7 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "moi",
+  "title": "testiblogi",
   "author": "joku",
-  "url": "dfdsjkf"
+  "url": "dfdsjkf.com",
+  "userId": "63e25cad970e28b80ed19f6d"
 }
