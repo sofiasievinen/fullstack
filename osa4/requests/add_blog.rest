@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlkYSIsImlkIjoiNjNlMjVlYTg5NzBlMjhiODBlZDE5Zjc0IiwiaWF0IjoxNjc1NzgxNzExfQ.HFVKTqARHvXbsdd0ZNDoHNfZJyXCVWQofwhgvkbvfwY
 
 {
-  "title": "testiblogi",
-  "author": "joku",
-  "url": "dfdsjkf.com",
-  "userId": "63e25cad970e28b80ed19f6d"
+  "title": "idan testi",
+  "author": "kirjoittaja",
+  "url": "blogi.com"
 }
