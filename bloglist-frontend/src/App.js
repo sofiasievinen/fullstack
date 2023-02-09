@@ -2,12 +2,18 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('') 
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState ('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [isError, setError] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -34,14 +40,60 @@ const App = () => {
         'loggedUser', JSON.stringify(user)
       ) 
       blogService.setToken(user.token)
+      console.log('token',user.token)
+      
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      /*setErrorMessage('wrong credentials')
+      setError(false)
+      setNotificationMessage(`successfully logged in as ${username}`)
       setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)*/
+        setNotificationMessage(null)
+      }, 5000) 
+    }
+    catch (exception) {
+      console.log('täällä ollaan')
+      setNotificationMessage('wrong username or password')
+      setError(true)
+      console.log('errorin arvo', isError)
+      console.log('message', notificationMessage)
+      
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setError(false)
+      }, 5000) 
+    }
+  }
+
+  const createBlog = async (event) => {
+    event.preventDefault()
+    console.log('trying to post')
+    try {
+      const blog = await blogService.create({
+        title: title,
+        author: author,
+        url: url
+      })
+      console.log(blog)
+      
+      setBlogs(blogs.concat(blog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setError(false)
+      setNotificationMessage(`a new blog ${title} by ${author} added`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setError(false)
+      }, 5000)
+    }
+    catch (exception) {
+      setError(true)
+      setNotificationMessage(`couldn't add blog`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setError(false)
+      }, 5000) 
     }
   }
 
@@ -50,6 +102,12 @@ const App = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
     blogService.setToken('')
+    setError(false)
+    setNotificationMessage(`successfully logged out`)
+    setTimeout(() => {
+      setNotificationMessage(null)
+      setError(false)
+    }, 5000)
   }
 
     const LoginForm = () => (
@@ -78,21 +136,38 @@ const App = () => {
       </form>      
     )
 
-    /*const blogForm = () => (
-      <form onSubmit={addBlog}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange}
+    const BlogForm = () => (
+      <form onSubmit={createBlog}>
+        
+        title:<input
+          value={title}
+          //autoFocus="autoFocus"
+          onChange={({ target }) => setTitle(target.value)}
         />
-        <button type="submit">save</button>
+        <br></br>
+        author:<input
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
+        <br></br>
+        url:<input
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+        />
+        <br></br>
+        <button type="submit">create</button>
       </form>  
-    )*/
+    )
 
 
   if (user === null) {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification 
+          message = {notificationMessage} 
+          isError = {isError}
+        />
         <LoginForm/>
       </div>
     )
@@ -101,8 +176,15 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification 
+        message = {notificationMessage} 
+        isError = {isError}
+      />
       <p>{user.name} logged in</p>
       <button onClick = {handleLogOut} >logout</button>
+      <br></br>
+      <h2>create new</h2>
+      <BlogForm/>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
