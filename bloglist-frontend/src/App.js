@@ -22,8 +22,7 @@ const App = () => {
       setBlogs( blogs )
     )  
     //console.log(blogs[0])
-    
-  }, [])
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
