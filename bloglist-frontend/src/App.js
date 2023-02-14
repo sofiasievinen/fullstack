@@ -21,6 +21,8 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
+    //console.log(blogs[0])
+    
   }, [])
 
   useEffect(() => {
