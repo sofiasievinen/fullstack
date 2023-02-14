@@ -16,12 +16,12 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [isError, setError] = useState(false)
+  const [likedBlog, setLikedBlog] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )  
-    //console.log(blogs[0])
   }, [blogs])
 
   useEffect(() => {
@@ -32,6 +32,10 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  useEffect(() => {
+    console.log('liked blog is now',likedBlog)
+  }, [likedBlog])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -68,7 +72,7 @@ const App = () => {
     }
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async ({event}) => {
     event.preventDefault()
     console.log('trying to post')
     try {
@@ -128,6 +132,25 @@ const App = () => {
     setUrl(event.target.value)
   }
 
+  const handleLike = async ({blog}) => {
+    console.log('liked')
+    try {
+      await likedBlog
+      console.log('liked blog is',blog)
+      const likes = blog.likes + 1 
+      const changedBlog = { ...blog, likes: likes}
+      await blogService.update(blog.id, changedBlog)
+    }
+    catch (exception) {
+      setError(true)
+      setNotificationMessage(`couldn't like blog`)
+      setTimeout(() => {
+        setNotificationMessage(null)
+        setError(false)
+      }, 5000) 
+    }
+  }
+
     const LoginForm = () => (
       <form onSubmit={handleLogin}>
         <div>
@@ -144,7 +167,6 @@ const App = () => {
           password
             <input
             type="password"
-            //autoFocus="autoFocus"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
@@ -190,7 +212,7 @@ const App = () => {
       />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLike = {handleLike} setLikedBlog = {setLikedBlog}/>
       )}
     </div>
   )

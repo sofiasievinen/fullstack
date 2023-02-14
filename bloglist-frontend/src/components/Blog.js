@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({blog}) => {
+const Blog = ({blog, handleLike, setLikedBlog}) => {
 
   const [infoVisible, setInfoVisible] = useState(false)
   const hideWhenVisible = { display: infoVisible ? 'none' : '' }
@@ -13,7 +13,13 @@ const Blog = ({blog}) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+
+  const handleClick = async (event) => {
+    await setLikedBlog(blog)
+    await handleLike({blog})
+    console.log('handleclick done')
+    
+  }
 
   return (
     <div style={blogStyle}>
@@ -28,7 +34,7 @@ const Blog = ({blog}) => {
           {blog.url}
           <br></br>
         likes {blog.likes}
-        <button>like</button>
+        <button onClick = {handleClick}>like</button>
         <br></br>
         {blog.user.name}
         </div>

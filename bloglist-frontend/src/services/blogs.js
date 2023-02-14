@@ -28,5 +28,15 @@ const create = async (newObject) => {
   return response.data
 }
 
+const update = async (id, newObject) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  
+  const response = await axios.post(`${baseUrl}/${id}`, newObject, config)
+  console.log('res',response.data)
+  return response.data
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, setToken }
+export default { getAll, create, setToken, update }
