@@ -1,12 +1,17 @@
 const BlogForm = ({handleSubmit, title, handleTitleChange, 
                    author, handleAuthorChange, url, handleUrlChange}) => {
+
+    const handleThis = async (event) => {
+        await handleSubmit({event})
+        console.log('handleclick done')
+        }
+
     return ( 
         <div>
         <h2>create new</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleThis}>
             <div>
             title:<input value={title}
-            autoFocus="autoFocus"
             onChange={handleTitleChange}
             />
             </div>

@@ -17,7 +17,6 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
   const [isError, setError] = useState(false)
-  const [likedBlog, setLikedBlog] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -33,10 +32,6 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
-
-  useEffect(() => {
-    console.log('liked blog is now',likedBlog)
-  }, [likedBlog])
 
   const  compare = (a, b) => {
     if (a.likes < b.likes) {
@@ -146,7 +141,6 @@ const App = () => {
   const handleLike = async ({blog}) => {
     console.log('liked')
     try {
-      await likedBlog
       console.log('liked blog is',blog)
       const likes = blog.likes + 1 
       const changedBlog = { ...blog, likes: likes}
@@ -159,6 +153,29 @@ const App = () => {
         setNotificationMessage(null)
         setError(false)
       }, 5000) 
+    }
+  }
+
+  const handleRemove = async ({blog}) => {
+    console.log('remove', blog)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog.id)
+        setBlogs(blogs.filter(x => x.id !== blog.id))
+        setNotificationMessage(`${blog.title} by ${blog.author} successfully deleted`)
+        setTimeout(() => {
+        setNotificationMessage(null)
+        setError(false)
+      }, 5000)
+      }
+      catch (exception) {
+        setError(true)
+        setNotificationMessage(`couldn't remove blog`)
+        setTimeout(() => {
+          setNotificationMessage(null)
+          setError(false)
+        }, 5000) 
+      }
     }
   }
 
@@ -204,7 +221,10 @@ const App = () => {
       />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike = {handleLike} setLikedBlog = {setLikedBlog}/>
+        <Blog key={blog.id} blog={blog} 
+        handleLike = {handleLike} 
+        handleRemove = {handleRemove}
+        user = {user}/>
       )}
     </div>
   )
