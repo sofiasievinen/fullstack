@@ -21,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort(compare))
     )  
   }, [blogs])
 
@@ -37,6 +37,16 @@ const App = () => {
   useEffect(() => {
     console.log('liked blog is now',likedBlog)
   }, [likedBlog])
+
+  const  compare = (a, b) => {
+    if (a.likes < b.likes) {
+      return 1;
+    }
+    if (a.likes > b.likes) {
+      return -1;
+    }
+    else return 0;
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
