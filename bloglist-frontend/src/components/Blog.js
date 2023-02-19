@@ -27,7 +27,7 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
     return (
       <div style={blogStyle}>
         <div style={hideWhenVisible}>
-          {blog.title} {blog.author}
+          {blog.title} by {blog.author}
           <button onClick={() => setInfoVisible(true)}>view</button>
         </div>
         <div style={showWhenVisible}>
@@ -50,7 +50,7 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
   return (
     <div style={blogStyle}>
       <div style={hideWhenVisible}>
-        {blog.title} {blog.author}
+        {blog.title} by {blog.author}
         <button onClick={() => setInfoVisible(true)}>view</button>
       </div>
       <div style={showWhenVisible}>
