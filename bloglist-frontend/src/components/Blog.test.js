@@ -1,6 +1,7 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 import App from '../App'
 
@@ -25,5 +26,35 @@ test('renders content', () => {
 
   expect(element.container).toHaveTextContent(
     'Testiblogi by Testaaja'
+  )
+})
+
+test('clicking the view button shows all info', async () => {
+  const blog = {
+    title: 'Testiblogi',
+    author: 'Testaaja',
+    url: 'www.testi.fi',
+    likes: 3,
+    user: {
+      username: 'Joku',
+      name: 'tyyppi'
+    },
+  }
+
+  const blogUser = {
+    username: 'Joku',
+    name: 'tyyppi'
+  }
+
+  const mockHandler = jest.fn()
+
+  const element = render(<Blog blog={blog} handleLike = {App.handleLike} handleRemove = {App.handleRemove} user = {blogUser} setInfoVisible = {mockHandler}/>)
+
+  const user = userEvent.setup()
+  const button = screen.getByText('view')
+  await user.click(button)
+
+  expect(element.container).toHaveTextContent(
+    'likes 3'
   )
 })
