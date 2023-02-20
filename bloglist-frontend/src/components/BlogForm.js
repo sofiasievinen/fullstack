@@ -13,18 +13,24 @@ const BlogForm = ({ handleSubmit, title, handleTitleChange,
         <div>
         title:<input value={title}
             onChange={handleTitleChange}
+            placeholder='write title here'
+            id = 'title'
           />
         </div>
         <div>
         author:<input
             value={author}
             onChange={handleAuthorChange}
+            placeholder='write author here'
+            id = 'author'
           />
         </div>
         <div>
         url:<input
             value={url}
             onChange={handleUrlChange}
+            placeholder='write url here'
+            id = 'url'
           />
         </div>
         <div>
